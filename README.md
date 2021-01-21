@@ -1,4 +1,4 @@
-## CSTS: bayesian joint modeling of single-cell expression data and bulk spatial transcriptomic data
+## CSTS: Recovering spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data
 
 The R package CSTS implements the two-step method proposed by Jinge Yu and Xiangyu Luo (2021+) that recovers spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data. In this package, we employed a two-step algorithm to perform efficient thresholded Bayesian posterior estimates for gene co-expression networks in each cell and predict gene co-expression networks where cells are missing. CSTS can be installed in commonly used operating systems including Windows, Linux and Mac OS. 
 
