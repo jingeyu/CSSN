@@ -103,5 +103,5 @@ pre <- CSSNPredict(Sparse.Corr, cell.info, miss.indx)
 
 }
 \references{
-
+  Jinge Yu and Xiangyu Luo, "Recovering spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data." (under review in Frontiers in Genetics)
 }
