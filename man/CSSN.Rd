@@ -1,37 +1,40 @@
 \name{CSSN}
 \alias{CSSNEst}
 \alias{CSSNPredict}
-\title{Recover spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data and predict cell-specific gene co-expression networks on tissue positions where cells are not captured.}
+\title{Estimation and prediction of spatially-varying cell-specific gene co-expression networks.}
 \usage{
 CSSNEst(X, cell.info, nu, d = 0.1, m.info = 70, is.scale = TRUE)
 CSSNPredict(GN, cell.info, miss.indx, m.info = 70)
 }
 \arguments{
-\item{X}{spatial single-cell RNA-sequencing data, where rows represent genes and columns represent cells. Matrix values need to be non-negative and continuous.}
+\item{X}{The spatial single-cell expression data matrix, where rows represent genes and columns are cells.}
 
-\item{cell.info}{cell information matrix (n,3), where rows stands for cells, the first column represents cell type label of cells, the second and third columns are Centroid_X Centroid_Y coordinates respectively.}
+\item{cell.info}{The cell information matrix with dimension (n,3), where rows stand for cells, the first column represents cell types, and the second and third columns are Centroid_X and Centroid_Y coordinates, respectively.}
 
-\item{nu}{n dimension vector, the degree of freedom of the prior Inverse-Wishart distribution of \eqn{\Sigma_i}.}
+\item{nu}{A vector with dimension n, the degrees of freedom in the Inverse-Wishart prior of \eqn{\Sigma_i}.}
 
-\item{d}{numeric threshold parameter, the range is 0~1. The default value is 0.1.}
+\item{d}{The thresholding parameter, whose range is between 0 and 1. The default value is 0.1.}
 
-\item{m.info}{numeric, cell density parameter. The default is 70.}
+\item{m.info}{The cell density parameter. The default is 70.}
 
-\item{is.scale}{bool, if TRUE, the variance of gene expression data in each cell type will be scaled to 1. The default is TRUE.}
+\item{is.scale}{a bool variable, if TRUE, the variance of gene expression data in each cell type will be scaled to 1. The default is TRUE.}
 
-\item{GN}{estimated gene co-expression networks, an array of (G,G,n).}
+\item{GN}{The estimated gene co-expression networks from the output of the function CSSNEst, an array with dimensions (G,G,n).}
 
-\item{miss.indx}{coordinates of missing cells, a (miss.num, 2) matrix, where miss.num is the number of missing cells.}
+\item{miss.indx}{The coordinates of the missing cells, a matrix with dimensions (miss.num, 2), where miss.num is the number of missing cells.}
 
 }
+
 \value{
-CSSNEst returns an array with (G,G,miss.num) of gene co-expression networks for each missing cell and CSSNEst returns an R list including the following information.
-\item{Correlation Matrix}{Gene correlation matrix of n cells, an array with dimension (G,G,n), where G is the number of genes and n is the number of cells.}
-\item{Gene Networks}{Gene co-expression networks of n cells, an array with dimension (G,G,n), where G is the number of genes and n is the number of cells.}
+CSSNPredict returns an array with dimensions (G,G,miss.num) of gene co-expression networks for each missing cell, and CSSNEst returns an R list including the following information.
+\item{Correlation Matrix}{The gene correlation matrices for n cells, an array with dimensions (G,G,n), where G is the number of genes and n is the number of cells.}
+\item{Gene Networks}{The gene co-expression networks for n cells, an array with dimensions (G,G,n), where G is the number of genes and n is the number of cells.}
 }
+
 \description{
-The function CSSNEst implements a two-step algorithm to estimate cell-specific gene co-expression networks, the function CSSNPredict implements a two-step algorithm to estimate cell-specific gene co-expression networks.
+Functions CSSNEst and CSSNPredict in the package can provide estimates for gene co-expression networks of each cell and network predictions in a centroid location where cells are missing. CSSN can be installed in Windows, Linux, and Mac OS.
 }
+
 \examples{
 library(CSSN)
 library(ggplot2)
@@ -100,5 +103,5 @@ pre <- CSSNPredict(Sparse.Corr, cell.info, miss.indx)
 
 }
 \references{
-
+  Jinge Yu and Xiangyu Luo, "Recovering spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data." (under review in Frontiers in Genetics)
 }

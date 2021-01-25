@@ -1,6 +1,6 @@
 ## CSSN: Recovering spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data
 
-The R package CSSN implements the two-step method proposed by Jinge Yu and Xiangyu Luo (2021+) that recovers spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data. In this package, we employed a two-step algorithm to perform efficient thresholded Bayesian posterior estimates for gene co-expression networks in each cell and predict gene co-expression networks where cells are missing. CSSN can be installed in commonly used operating systems including Windows, Linux and Mac OS. 
+The R package CSSN implements the two-step algorithm proposed by Jinge Yu and Xiangyu Luo that can recover spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data. The name CSSN is short for "Cell-Specific Spatial Network." Functions in the package can provide estimates for gene co-expression networks of each cell and predict gene co-expression networks in a centroid location where cells are missing. CSSN can be installed in Windows, Linux, and Mac OS. 
 
 
 ## Prerequisites and Installation
@@ -15,12 +15,16 @@ devtools::install_github("jingeyu/CSSN")
 
 
 ## Example Code
-Following shows an example that generates data and runs the main function "CSSNEst" and "CSSNPredict" in our package. 
+The following shows an example that runs the main functions "CSSNEst" and "CSSNPredict" in our package. 
 
 ``` {r, eval=FALSE}
 library(CSSN)
+#install.packages('ggplot2')
 library(ggplot2)
+#install.packages('pheatmap')
 library(pheatmap)
+
+#read example data
 data(example_data)
 
 # gene number
