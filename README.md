@@ -90,7 +90,7 @@ pre <- CSSNPredict(Sparse.Corr, cell.info, miss.indx)
 or you can simply run
 ``` {r, eval=FALSE}
 library(CSSN)
-example(CSSNEst)
+example("CSSNEst")
 ```
 
 ## Remarks
