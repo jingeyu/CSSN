@@ -37,8 +37,12 @@ Functions CSSNEst and CSSNPredict in the package can provide estimates for gene 
 
 \examples{
 library(CSSN)
+#install.packages('ggplot2')
 library(ggplot2)
+#install.packages('pheatmap')
 library(pheatmap)
+
+#read example data
 data(example_data)
 
 # gene number
@@ -47,7 +51,7 @@ G <- nrow(X)
 n <- ncol(X)
 
 #---- set spatial pattern manually----
-pal <- c(rgb(221, 160, 221, maxColorValue = 255), 
+pal <- c(rgb(221, 160, 221, maxColorValue = 255),
         rgb(0, 206, 209, maxColorValue = 255))
 pal <- setNames(pal, c("1", "2"))
 
@@ -90,7 +94,7 @@ for(i in 1:10){
                 show_rownames = F, show_colnames = F,
                 width = 3.3, height = 2.8,
                 filename = filename[i]
-                
+
  )
 }
 # Prediction
