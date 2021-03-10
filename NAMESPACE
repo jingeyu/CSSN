@@ -1,4 +1,5 @@
 importFrom("stats", "cov2cor")
+importFrom("Matrix", "Matrix")
 export(CSSNEst,
        CSSNPredict)
 
