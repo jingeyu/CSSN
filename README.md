@@ -33,7 +33,7 @@ G <- nrow(X)
 n <- ncol(X)
 
 #---- set spatial pattern manually----
-pal <- c(rgb(221, 160, 221, maxColorValue = 255), 
+pal <- c(rgb(221, 160, 221, maxColorValue = 255),
         rgb(0, 206, 209, maxColorValue = 255))
 pal <- setNames(pal, c("1", "2"))
 
@@ -61,22 +61,21 @@ ggsave("cell spatial.png", pl, width = 9, height = 12)
 
 #----run CSSNEst--------
 nu <- rep(2*G, n)
-Result <- CSSNEst(X, cell.info, nu = nu, d = 0.1, m.info = 70, is.scale = TRUE)
-Sparse.Corr <- Result$`Gene Networks`
+Result <- CSSNEst(X, cell.info, nu = nu, d = 0.1, m.info = 70, is.scale = TRUE, is.all = TRUE)
 
 #-----The first five cell's estimated gene co-expression networks-----
 colors_func <- colorRampPalette(c('white', "black"))
 colors <- colors_func(2)
 filename <- paste0("Est_", 1:5, ".png")
 for(i in 1:10){
- p2 <- pheatmap(Sparse.Corr[,,i],
+ p2 <- pheatmap(Result[[i]],
                 color = colors,
                 legend_breaks = c(0,1),
                 cluster_cols = F, cluster_rows = F,
                 show_rownames = F, show_colnames = F,
                 width = 3.3, height = 2.8,
                 filename = filename[i]
-                
+
  )
 }
 # Prediction
@@ -85,12 +84,12 @@ miss.num <- 5
 miss.x <- runif(miss.num, min(cell.info[,2]), max(cell.info[,2]))
 miss.y <- runif(miss.num, min(cell.info[,3]), max(cell.info[,3]))
 miss.indx <- cbind(miss.x, miss.y)
-pre <- CSSNPredict(Sparse.Corr, cell.info, miss.indx)
+pre <- CSSNPredict(Result, cell.info, miss.indx)
 ```
 or you can simply run
 ``` {r, eval=FALSE}
 library(CSSN)
-example("CSSNEst")
+example(CSSNEst)
 ```
 
 ## Remarks
