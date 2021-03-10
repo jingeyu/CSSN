@@ -3,7 +3,7 @@
 \alias{CSSNPredict}
 \title{Estimation and prediction of spatially-varying cell-specific gene co-expression networks.}
 \usage{
-CSSNEst(X, cell.info, nu, d = 0.1, m.info = 70, is.scale = TRUE)
+CSSNEst(X, cell.info, nu, d = 0.1, m.info = 70, is.scale = TRUE, is.all = TRUE, indx.cell = NULL)
 CSSNPredict(GN, cell.info, miss.indx, m.info = 70)
 }
 \arguments{
@@ -19,16 +19,18 @@ CSSNPredict(GN, cell.info, miss.indx, m.info = 70)
 
 \item{is.scale}{a bool variable, if TRUE, the variance of gene expression data in each cell type will be scaled to 1. The default is TRUE.}
 
+\item{is.all}{bool, if TRUE, the CSSNEst returns gene co-expression networks of all cells, if FALSE, the function returns networks of assigned cells in indx.cell. The default is TRUE.}
+
+\item{indx.cell}{cell index vector, If is.all is FALSE, the function CSSNEst only calculates gene co-expression networks in indx.cell. The default is NULL.}
+
+
 \item{GN}{The estimated gene co-expression networks from the output of the function CSSNEst, an array with dimensions (G,G,n).}
 
 \item{miss.indx}{The coordinates of the missing cells, a matrix with dimensions (miss.num, 2), where miss.num is the number of missing cells.}
-
 }
 
 \value{
-CSSNPredict returns an array with dimensions (G,G,miss.num) of gene co-expression networks for each missing cell, and CSSNEst returns an R list including the following information.
-\item{Correlation Matrix}{The gene correlation matrices for n cells, an array with dimensions (G,G,n), where G is the number of genes and n is the number of cells.}
-\item{Gene Networks}{The gene co-expression networks for n cells, an array with dimensions (G,G,n), where G is the number of genes and n is the number of cells.}
+CSSNPredict returns an array with (G,G,miss.num) of gene co-expression networks for each missing cell and CSSNEst returns an R list with n elments, where n is the number of cells with gene co-expression networks calculated. Each element is a sparse matrix with dimension (G, G), where G is the number of genes.
 }
 
 \description{
@@ -79,15 +81,14 @@ ggsave("cell spatial.png", pl, width = 9, height = 12)
 
 #----run CSSNEst--------
 nu <- rep(2*G, n)
-Result <- CSSNEst(X, cell.info, nu = nu, d = 0.1, m.info = 70, is.scale = TRUE)
-Sparse.Corr <- Result$`Gene Networks`
+Result <- CSSNEst(X, cell.info, nu = nu, d = 0.1, m.info = 70, is.scale = TRUE, is.all = TRUE)
 
 #-----The first five cell's estimated gene co-expression networks-----
 colors_func <- colorRampPalette(c('white', "black"))
 colors <- colors_func(2)
 filename <- paste0("Est_", 1:5, ".png")
 for(i in 1:10){
- p2 <- pheatmap(Sparse.Corr[,,i],
+ p2 <- pheatmap(Result[[i]],
                 color = colors,
                 legend_breaks = c(0,1),
                 cluster_cols = F, cluster_rows = F,
@@ -103,7 +104,7 @@ miss.num <- 5
 miss.x <- runif(miss.num, min(cell.info[,2]), max(cell.info[,2]))
 miss.y <- runif(miss.num, min(cell.info[,3]), max(cell.info[,3]))
 miss.indx <- cbind(miss.x, miss.y)
-pre <- CSSNPredict(Sparse.Corr, cell.info, miss.indx)
+pre <- CSSNPredict(Result, cell.info, miss.indx)
 
 }
 \references{
