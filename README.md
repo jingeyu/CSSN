@@ -62,7 +62,8 @@ ggsave("cell spatial.png", pl, width = 9, height = 12)
 #----run CSSNEst--------
 nu <- rep(2*G, n)
 Result <- CSSNEst(X, cell.info, nu = nu, d = 0.1, m.info = 70, is.scale = TRUE, is.all = TRUE)
-
+indx.cell <- c(1,3,7,10)
+result <- CSSNEst(X, cell.info, nu = nu, d = 0.1, m.info = 70, is.scale = TRUE, is.all = FALSE, indx.cell = indx.cell, output.corr = TRUE)
 #-----The first five cell's estimated gene co-expression networks-----
 colors_func <- colorRampPalette(c('white', "black"))
 colors <- colors_func(2)
