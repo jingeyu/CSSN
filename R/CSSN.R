@@ -1,6 +1,7 @@
 CSSNEst <- function(X, cell.info, nu, d = 0.1,
                     m.info = 70, is.scale = TRUE,
-                    is.all = TRUE, indx.cell = NULL){
+                    is.all = TRUE, indx.cell = NULL, 
+                    output.corr = FALSE){
   library(Matrix)
   #---- Step0 Preprocess of Data ------
   # if there is NaNs in the dataset
@@ -107,36 +108,72 @@ CSSNEst <- function(X, cell.info, nu, d = 0.1,
   }
 
   if(is.all == TRUE){
-    # Sgm.est <- array(NA, dim = c(G, G, n))
-    Corr.est  <- list()
-    # Corr.est <- array(NA, dim = c(G, G, n))
-    for(i in 1:n){
-      tmp <- SgmEst(nu[i], i, K, Sgm.hat)
-      tmp <- cov2cor(tmp)
-      tmp[abs(tmp) < 0.1] <- 0
-      tmp[tmp != 0] <- 1
-      Corr.est[[i]] <- Matrix(data = tmp, sparse = TRUE)
+    if(output.corr == TRUE){
+      Corr.ori <- array(NA, dim = c(G, G, n))
+      Corr.sparse  <- list()
+      for(i in 1:n){
+        tmp <- SgmEst(nu[i], i, K, Sgm.hat)
+        tmp <- cov2cor(tmp)
+        Corr.ori[,,i] <- tmp
+        tmp[abs(tmp) < 0.1] <- 0
+        tmp[tmp != 0] <- 1
+        Corr.sparse[[i]] <- Matrix(data = tmp, sparse = TRUE)
+      }
+      return(list("Correlation Matrix" = Corr.ori,
+                  "Gene Networks" = Corr.sparse))
+    } else{
+      Corr.sparse <- list()
+      for(i in 1:n){
+        tmp <- SgmEst(nu[i], i, K, Sgm.hat)
+        tmp <- cov2cor(tmp)
+        tmp[abs(tmp) < 0.1] <- 0
+        tmp[tmp != 0] <- 1
+        Corr.sparse[[i]] <- Matrix(data = tmp, sparse = TRUE)
+      }
+      return(Corr.sparse)
     }
+   
   } else{
     n2 <- length(indx.cell)
-    Corr.est <- list()
-    for(i in 1:n2){
-      tmp <- SgmEst(nu[indx.cell[i]], indx.cell[i], K, Sgm.hat)
-      tmp <- cov2cor(tmp)
-      tmp[abs(tmp) < 0.1] <- 0
-      tmp[tmp != 0] <- 1
-      Corr.est[[i]] <- Matrix(data = tmp, sparse = TRUE)
-    }
+    if(output.corr == TRUE){
+      Corr.ori <- array(NA, dim = c(G, G, n))
+      Corr.sparse  <- list()
+      for(i in 1:n2){
+        tmp <- SgmEst(nu[indx.cell[i]], indx.cell[i], K, Sgm.hat)
+        tmp <- cov2cor(tmp)
+        Corr.ori[,,i] <- tmp
+        tmp[abs(tmp) < 0.1] <- 0
+        tmp[tmp != 0] <- 1
+        Corr.sparse[[i]] <- Matrix(data = tmp, sparse = TRUE)
+      }
+      return(list("Correlation Matrix" = Corr.ori,
+                  "Gene Networks" = Corr.sparse))
+    } else{
+      Corr.sparse  <- list()
+      for(i in 1:n2){
+        tmp <- SgmEst(nu[indx.cell[i]], indx.cell[i], K, Sgm.hat)
+        tmp <- cov2cor(tmp)
+        tmp[abs(tmp) < 0.1] <- 0
+        tmp[tmp != 0] <- 1
+        Corr.sparse[[i]] <- Matrix(data = tmp, sparse = TRUE)
+      }
+      return(Corr.sparse)
   }
 
-  return(Corr.est)
+  }
 }
 
 
 CSSNPredict <- function(GN, cell.info, miss.indx, m.info = 70){
   G <- nrow(GN[[1]])
   miss.num <- nrow(miss.indx)
-
+  n <- nrow(cell.info)
+  n1 <- length(GN)
+  # if the input gene co-expression matrix is of all cells.
+  if(n != n1){
+    stop("Please input the gene co-expression matrix of all cells!")
+  }
+  
   if(min(miss.indx[,1]) < min(cell.info[,2]) | min(miss.indx[,2]) < min(cell.info[,3]) | max(miss.indx[,1]) > max(cell.info[,2]) | max(miss.indx[,1]) > max(cell.info[,2])){
     stop("Please remove cells out of the range of tissue slice!")
   }
@@ -155,7 +192,6 @@ CSSNPredict <- function(GN, cell.info, miss.indx, m.info = 70){
     return(cbind(nei.indx, cell.type.nei))
   }
 
-  # est.miss <- array(NA, dim = c(G, G, miss.num))
   est.miss <- list()
   for(i in 1:miss.num){
     miss.nei <- NeiFind(miss.indx[i,])
@@ -168,6 +204,5 @@ CSSNPredict <- function(GN, cell.info, miss.indx, m.info = 70){
     tmp[tmp >= 0.5] <- 1
     est.miss[[i]] <- tmp
   }
-
   return(est.miss)
 }
