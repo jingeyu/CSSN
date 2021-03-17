@@ -109,12 +109,12 @@ CSSNEst <- function(X, cell.info, nu, d = 0.1,
 
   if(is.all == TRUE){
     if(output.corr == TRUE){
-      Corr.ori <- array(NA, dim = c(G, G, n))
+      Corr.ori <- list()
       Corr.sparse  <- list()
       for(i in 1:n){
         tmp <- SgmEst(nu[i], i, K, Sgm.hat)
         tmp <- cov2cor(tmp)
-        Corr.ori[,,i] <- tmp
+        Corr.ori[[i]] <- tmp
         tmp[abs(tmp) < 0.1] <- 0
         tmp[tmp != 0] <- 1
         Corr.sparse[[i]] <- Matrix(data = tmp, sparse = TRUE)
@@ -136,12 +136,12 @@ CSSNEst <- function(X, cell.info, nu, d = 0.1,
   } else{
     n2 <- length(indx.cell)
     if(output.corr == TRUE){
-      Corr.ori <- array(NA, dim = c(G, G, n))
+      Corr.ori <- list()
       Corr.sparse  <- list()
       for(i in 1:n2){
         tmp <- SgmEst(nu[indx.cell[i]], indx.cell[i], K, Sgm.hat)
         tmp <- cov2cor(tmp)
-        Corr.ori[,,i] <- tmp
+        Corr.ori[[i]] <- tmp
         tmp[abs(tmp) < 0.1] <- 0
         tmp[tmp != 0] <- 1
         Corr.sparse[[i]] <- Matrix(data = tmp, sparse = TRUE)
