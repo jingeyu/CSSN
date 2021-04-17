@@ -1,8 +1,7 @@
 Package: CSSN
 Type: Package
-Title: Recovering spatially-varying cell-specific gene co-expression
-        networks for single-cell spatial expression data.
-Version: 1.0.0
+Title: Recovering spatially-varying cell-specific gene co-expression networks for single-cell spatial expression data.
+Version: 0.99.1
 Date: 2021-03-17
 Author: Jinge Yu, Xiangyu Luo
 Maintainer: Jinge Yu <yjgruc@ruc.edu.cn>
@@ -10,7 +9,10 @@ Description: The R package CSSN implements the two-step algorithm proposed by Ji
 Depends: R (>= 3.6), stats, Matrix
 License: GPL (>= 2)
 RoxygenNote: 7.1.1
+VignetteBuilder: knitr
+Suggests: BiocStyle, knitr, RUnit, BiocGenerics, rmarkdown
+biocViews: GeneExpression, StatisticalMethod, GraphAndNetwork, Normalization
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
-Packaged: 2021-03-17 11:59:41 UTC; jinge.yu
+Packaged: 2021-03-10 12:55:24 UTC; jinge.yu
